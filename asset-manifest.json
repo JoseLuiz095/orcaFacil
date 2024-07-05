@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/projeto-pessoal/static/css/main.0490f886.css",
-    "main.js": "/projeto-pessoal/static/js/main.c84192d3.js",
-    "static/media/savings.svg": "/projeto-pessoal/static/media/savings.25a5174d3c0ce57522d68f3ba58b7407.svg",
-    "index.html": "/projeto-pessoal/index.html",
-    "static/media/loading.svg": "/projeto-pessoal/static/media/loading.cb532fb55bf84419963cc55778925f86.svg",
-    "main.0490f886.css.map": "/projeto-pessoal/static/css/main.0490f886.css.map",
-    "main.c84192d3.js.map": "/projeto-pessoal/static/js/main.c84192d3.js.map"
+    "main.css": "/orcaFacil/static/css/main.0490f886.css",
+    "main.js": "/orcaFacil/static/js/main.95b65d8d.js",
+    "static/media/savings.svg": "/orcaFacil/static/media/savings.25a5174d3c0ce57522d68f3ba58b7407.svg",
+    "index.html": "/orcaFacil/index.html",
+    "static/media/loading.svg": "/orcaFacil/static/media/loading.cb532fb55bf84419963cc55778925f86.svg",
+    "main.0490f886.css.map": "/orcaFacil/static/css/main.0490f886.css.map",
+    "main.95b65d8d.js.map": "/orcaFacil/static/js/main.95b65d8d.js.map"
   },
   "entrypoints": [
     "static/css/main.0490f886.css",
-    "static/js/main.c84192d3.js"
+    "static/js/main.95b65d8d.js"
   ]
 }
