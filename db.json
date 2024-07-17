@@ -1,0 +1,53 @@
+{
+  "projects": [
+    {
+      "id": "6907",
+      "name": "José Luiz Caetano Amorim ",
+      "budget": "2222211",
+      "category": {
+        "id": "1",
+        "name": "Infra"
+      },
+      "orcaFacil": 0,
+      "services": []
+    },
+    {
+      "id": "0bf8",
+      "name": "jldnaldnasnd~l",
+      "category": {
+        "id": "4",
+        "name": "Planejamento"
+      },
+      "budget": "8888",
+      "orcaFacil": 0,
+      "services": []
+    },
+    {
+      "id": "10d9",
+      "category": {
+        "id": "2",
+        "name": "Desenvolvimento"
+      },
+      "orcaFacil": 0,
+      "services": []
+    }
+  ],
+  "categories": [
+    {
+      "id": "1",
+      "name": "Infra"
+    },
+    {
+      "id": "2",
+      "name": "Desenvolvimento"
+    },
+    {
+      "id": "3",
+      "name": "Design"
+    },
+    {
+      "id": "4",
+      "name": "Planejamento"
+    }
+  ]
+}
