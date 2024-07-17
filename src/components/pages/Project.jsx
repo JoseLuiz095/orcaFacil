@@ -1,141 +1,134 @@
-import { v4 as uuidv4 } from "uuid"
-import styles from "./Project.module.css"
-import { useParams } from "react-router-dom"
-import { useState, useEffect } from "react"
-import Loading from "../layout/Loading"
-import Container from "../layout/Conteiner"
-import ProjectForm from "../project/ProjectForm"
-import Message from "../layout/Message"
-import ServiceForm from "../service/ServiceForm"
-import ServiceCard from "../service/ServiceCard"
+import { v4 as uuidv4 } from "uuid";
+import styles from "./Project.module.css";
+import { useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
+import Loading from "../layout/Loading";
+import Container from "../layout/Conteiner";
+import ProjectForm from "../project/ProjectForm";
+import Message from "../layout/Message";
+import ServiceForm from "../service/ServiceForm";
+import ServiceCard from "../service/ServiceCard";
 
 function Project() {
-    const { id } = useParams()
+    const { id } = useParams();
 
-    const [project, setProject] = useState([])
-    const [services, setServices] = useState([])
-    const [showProjectForm, setShowProjectForm] = useState(false)
-    const [showServiceForm, setShowServiceForm] = useState(false)
-    const [message, setMessage] = useState('')
-    const [type, setType] = useState('')
+    const [project, setProject] = useState([]);
+    const [services, setServices] = useState([]);
+    const [showProjectForm, setShowProjectForm] = useState(false);
+    const [showServiceForm, setShowServiceForm] = useState(false);
+    const [message, setMessage] = useState('');
+    const [type, setType] = useState('');
 
     useEffect(() => {
-        setTimeout(() => {
-            fetch(`http://localhost:5000/projects/${id}`, {
-                method: "GET",
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            })
-                .then((resp) => resp.json())
-                .then((data) => {
-                    setProject(data)
-                    setServices(data.services)
-                })
-                .catch((err) => console.log(err))
-        }, 500)
-    }, [id])
+        fetch(`${process.env.REACT_APP_API_URL}/projects/${id}`, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .then((resp) => resp.json())
+        .then((data) => {
+            setProject(data);
+            setServices(data.services);
+        })
+        .catch((err) => console.log(err));
+    }, [id]);
 
     function editPost(project) {
-        setMessage("")
-        // budget validation
+        setMessage("");
+        // validação de orçamento
         if (project.budget < project.orcaFacil) {
-            setMessage("O orçamento não pode ser menor que o custo do projeto!")
-            setType("error")
-            return false
+            setMessage("O orçamento não pode ser menor que o custo do projeto!");
+            setType("error");
+            return false;
         }
 
-        fetch(`http://localhost:5000/projects/${project.id}`, {
+        fetch(`${process.env.REACT_APP_API_URL}/projects/${project.id}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(project),
         })
-            .then((resp) => resp.json())
-            .then((data) => {
-                setProject(data)
-                setShowProjectForm(!showProjectForm)
-                setMessage('Projeto atualizado!')
-                setType('success')
-            })
-            .catch((err) => console.log(err))
+        .then((resp) => resp.json())
+        .then((data) => {
+            setProject(data);
+            setShowProjectForm(!showProjectForm);
+            setMessage('Projeto atualizado!');
+            setType('success');
+        })
+        .catch((err) => console.log(err));
     }
 
     function createService(project) {
-        setMessage("")
-        // last service
-        const lastService = project.services[project.services.length - 1]
-        lastService.id = uuidv4()
+        setMessage("");
+        // último serviço
+        const lastService = project.services[project.services.length - 1];
+        lastService.id = uuidv4();
 
-        const lastServiceOrcaFacil = lastService.orcaFacil
-        const newOrcaFacil = parseFloat(project.orcaFacil) + parseFloat(lastServiceOrcaFacil)
+        const lastServiceOrcaFacil = lastService.orcaFacil;
+        const newOrcaFacil = parseFloat(project.orcaFacil) + parseFloat(lastServiceOrcaFacil);
 
-        // maximum value validation
+        // validação de valor máximo
         if (newOrcaFacil > parseFloat(project.budget)) {
-            setMessage('Orçamento ultrapassado, verifique o valor do serviço!')
-            setType('error')
-            project.services.pop()
-            return false
+            setMessage('Orçamento ultrapassado, verifique o valor do serviço!');
+            setType('error');
+            project.services.pop();
+            return false;
         }
-        // add service cost to project cost total
-        project.orcaFacil = newOrcaFacil
+        // adicionar custo do serviço ao total do projeto
+        project.orcaFacil = newOrcaFacil;
 
-        //update prject
-
-        fetch(`http://localhost:5000/projects/${project.id}`, {
+        // atualizar projeto
+        fetch(`${process.env.REACT_APP_API_URL}/projects/${project.id}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(project),
         })
-            .then((resp) => resp.json())
-            .then((data) => {
-                //exibi os serviços
-                
-                setProject(data)
-                setShowServiceForm(!showServiceForm)
-                setMessage('Serviço adicionado!')
-                setType('success')
-            })
-            .catch((err) => console.log(err))
+        .then((resp) => resp.json())
+        .then((data) => {
+            setProject(data);
+            setShowServiceForm(!showServiceForm);
+            setMessage('Serviço adicionado!');
+            setType('success');
+        })
+        .catch((err) => console.log(err));
     }
-    function removeServices(id,orcaFacil) {
-        
-        const serviceUpdate= project.services.filter(
-            (service)=> service.id !== id
-        )
 
-        const projectUpdate = project
+    function removeServices(id, orcaFacil) {
+        const serviceUpdate = project.services.filter(
+            (service) => service.id !== id
+        );
 
-        projectUpdate.services = serviceUpdate
-        projectUpdate.orcaFacil = parseFloat(projectUpdate.orcaFacil) - parseFloat(orcaFacil)
+        const projectUpdate = { ...project };
+        projectUpdate.services = serviceUpdate;
+        projectUpdate.orcaFacil = parseFloat(projectUpdate.orcaFacil) - parseFloat(orcaFacil);
 
-        fetch(`http://localhost:5000/projects/${projectUpdate.id}`, {
+        fetch(`${process.env.REACT_APP_API_URL}/projects/${projectUpdate.id}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(projectUpdate),
         })
-            .then((resp) => resp.json())
-            .then((data) => {
-                //exibi os serviços
-                
-                setProject(projectUpdate)
-                setServices(serviceUpdate)
-                setMessage('Serviço removido com sucesso!')
-                setType('success')
-            })
-            .catch((err) => console.log(err))
+        .then((resp) => resp.json())
+        .then((data) => {
+            setProject(projectUpdate);
+            setServices(serviceUpdate);
+            setMessage('Serviço removido com sucesso!');
+            setType('success');
+        })
+        .catch((err) => console.log(err));
     }
 
     function toggleProjectForm() {
-        setShowProjectForm(!showProjectForm)
+        setShowProjectForm(!showProjectForm);
     }
+
     function toggleServiceForm() {
-        setShowServiceForm(!showServiceForm)
+        setShowServiceForm(!showServiceForm);
     }
 
     return (
@@ -204,7 +197,7 @@ function Project() {
                 <Loading />
             )}
         </>
-    )
+    );
 }
 
-export default Project
+export default Project;
